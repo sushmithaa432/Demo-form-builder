@@ -1,47 +1,52 @@
-'use client'
+'use client';
 import React from 'react';
-import { useDraggable } from '@dnd-kit/core';
-import { Paper, List, ListItem, ListItemText } from '@mui/material';
+import { useDrag } from 'react-dnd';
+import { Box, Typography } from '@mui/material';
 
-const Sidebar = () => {
-  const draggableItems = [
-    { id: 'text', label: 'Text Input', type: 'text' },
-    { id: 'checkbox', label: 'Checkbox', type: 'checkbox' },
-  ];
-
-  return (
-    <Paper elevation={3} style={{ padding: '16px', height: '100%' }}>
-      <h3 style={{ marginBottom: '16px' }}>Drag Fields</h3>
-      <List>
-        {draggableItems.map((item) => (
-          <DraggableItem key={item.id} id={item.id} label={item.label} type={item.type} />
-        ))}
-      </List>
-    </Paper>
-  );
-};
-
-const DraggableItem = ({ id, label, type }) => {
-  const { attributes, listeners, setNodeRef } = useDraggable({
-    id,
-    data: { label, type },
-  });
+const DraggableField = ({ fieldName }) => {
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'FIELD',
+    item: { fieldName },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
 
   return (
-    <ListItem
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={{
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        padding: '8px',
-        marginBottom: '8px',
+    <Box
+      ref={drag}
+      sx={{
+        padding: 2,
+        backgroundColor: isDragging ? '#d3d3d3' : '#e0e0e0',
+        marginBottom: 2,
+        borderRadius: 1,
         cursor: 'grab',
       }}
     >
-      <ListItemText primary={label} />
-    </ListItem>
+      {fieldName}
+    </Box>
+  );
+};
+
+const Sidebar = () => {
+  const additionalFields = ['Date of Birth', 'Gender', 'Marital Status', 'Emergency Contact', 'Nationality'];
+
+  return (
+    <Box
+      sx={{
+        width: '30%',
+        padding: 3,
+        backgroundColor: '#f5f5f5',
+        borderRight: '1px solid #ddd',
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Additional Fields
+      </Typography>
+      {additionalFields.map((field, index) => (
+        <DraggableField key={index} fieldName={field} />
+      ))}
+    </Box>
   );
 };
 

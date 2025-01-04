@@ -1,18 +1,17 @@
 'use client'
 import React from 'react';
-import { Card, CardContent, Typography, TextField, Checkbox } from '@mui/material';
 
-const Field = ({ type, label }) => {
+const Field = ({ label, type, placeholder, name }) => {
   return (
-    <Card variant="outlined" style={{ marginBottom: '16px' }}>
-      <CardContent>
-        <Typography variant="subtitle2" style={{ marginBottom: '8px' }}>
-          {label}
-        </Typography>
-        {type === 'text' && <TextField fullWidth placeholder={label} />}
-        {type === 'checkbox' && <Checkbox />}
-      </CardContent>
-    </Card>
+    <div className="flex flex-col">
+      <label className="font-medium mb-2 text-brown-700">{label}</label>
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        className="border border-brown-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brown-600"
+      />
+    </div>
   );
 };
 

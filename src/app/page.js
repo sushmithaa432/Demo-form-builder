@@ -1,45 +1,24 @@
 'use client';
+import Sidebar from './components/sidebar/sidebar'; // Correct Sidebar path
+import FormBuilder from './components/form/formbuilder'; // Correct FormBuilder path
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Box } from '@mui/material';
 
-import React, { useState } from 'react';
-import { DndContext } from '@dnd-kit/core';
-import { Grid, Container, Typography } from '@mui/material';
-import FormBuilder from '@/app/components/form/formbuilder'
-import Sidebar from '@/app/components/sidebar/sidebar'
-
-export default function Home() {
-  const [fields, setFields] = useState([]);
-
-  const handleDragEnd = (event) => {
-    const { active, over } = event;
-
-    if (over?.id === 'form-canvas') {
-      const newField = {
-        id: active.id,
-        label: active.data.current.label,
-        type: active.data.current.type,
-      };
-      setFields((prev) => [...prev, newField]);
-    }
-  };
-
+const Page = () => {
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <Container maxWidth="lg" style={{ height: '100vh', paddingTop: '32px' }}>
-        <Grid container spacing={2} style={{ height: '100%' }}>
-          {/* Sidebar */}
-          <Grid item xs={3}>
-            <Sidebar />
-          </Grid>
+    <DndProvider backend={HTML5Backend}>
+      <Box sx={{ display: 'flex', flexGrow: 1, minHeight: '100vh' }}>
+        {/* Sidebar with fixed width */}
+        <Sidebar sx={{ width: '30%' }} />
 
-          {/* Form Builder */}
-          <Grid item xs={9}>
-            <Typography variant="h5" gutterBottom>
-              Form Builder
-            </Typography>
-            <FormBuilder fields={fields} />
-          </Grid>
-        </Grid>
-      </Container>
-    </DndContext>
+        {/* FormBuilder with increased width */}
+        <Box sx={{ flex: 1, width: '70%' }}>
+          <FormBuilder />
+        </Box>
+      </Box>
+    </DndProvider>
   );
-}
+};
+
+export default Page;
